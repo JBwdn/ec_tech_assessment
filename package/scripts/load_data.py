@@ -8,40 +8,30 @@ NEO4J_URI = "neo4j://localhost:7687"
 
 LOAD_NODES_CQL = """
 LOAD CSV WITH HEADERS FROM 'file:///{path}' AS row
-WITH row LIMIT 100
-CREATE (:Node {{
+CALL apoc.create.node([row.category], {{
     id: row.id,
     name: row.name,
-    category: row.category,
     all_names: split(row.all_names, 'ǂ'),
     all_categories: split(row.all_categories, 'ǂ'),
     iri: row.iri,
     description: row.description,
     equivalent_curies: split(row.equivalent_curies, 'ǂ'),
     publications: split(row.publications, 'ǂ'),
-    label: row.label
-}});
+    label: split(row.label, 'ǂ')
+}}) YIELD node
+RETURN node
 """
 
-UPDATE_LABELS_CQL = """
-MATCH (n)
-WHERE n.category IS NOT NULL
-WITH n, labels(n) AS currentLabels, n.category AS newLabel
-CALL apoc.create.setLabels(n, [newLabel]) YIELD node
-RETURN count(node) AS updatedNodes;
-"""
-
-# WITH row LIMIT 100
 LOAD_EDGES_CQL = """
 LOAD CSV WITH HEADERS FROM 'file:///{path}' AS row
-MATCH (a:Node {{id: row.subject}}), (b:Node {{id: row.object}})
-MERGE (a)-[:RELATION {{
-    id: row.id,
-    predicate: row.predicate,
-    relation: row.relation,
-    publications: split(row.publications, 'ǂ'),
-    label: row.label
-}}]->(b);
+MATCH (subject {{name: row.subject}}), (object {{name: row.object}})
+CALL apoc.create.relationship(
+    subject,
+    row.predicate,
+    {{knowledge_source: split(row.knowledge_source, 'ǂ')}},
+    object
+) YIELD rel
+RETURN rel
 """
 
 
@@ -70,7 +60,6 @@ class DataLoader:
     def load_nodes(self, path: str) -> None:
         """Load nodes from a CSV file."""
         self.session.run(LOAD_NODES_CQL.format(path=path))  # type: ignore
-        self.session.run(UPDATE_LABELS_CQL)  # type: ignore
 
     def load_edges(self, path: str) -> None:
         """Load edges from a CSV file."""
@@ -88,4 +77,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    pass
+    main()
