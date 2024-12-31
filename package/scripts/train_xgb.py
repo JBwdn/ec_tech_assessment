@@ -1,5 +1,5 @@
 """
-An example script entrypoint, callable from the shell once the package is installed.
+Train an XGBoost classifer on the graph embeddings.
 """
 
 
@@ -9,4 +9,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    pass
