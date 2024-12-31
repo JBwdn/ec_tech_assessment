@@ -12,6 +12,7 @@ RUN_CMD = f"""podman run \
 --volume {os.getcwd()}:/var/lib/neo4j/import/ \
 --env NEO4J_AUTH=none \
 --env NEO4J_server_memory_heap_max__size=4G \
+--env NEO4J_PLUGINS=["apoc","graph-data-science"] \
 --memory 5g \
 neo4j"""
 
