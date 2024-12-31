@@ -14,6 +14,7 @@ Homepage = "https://github.com/JBwdn/python_template"
 
 [project.scripts]
 demo-script = "package.scripts.demo:main"
+launch_n4j = "package.scripts.launch_neo4j:main"
 
 [project.optional-dependencies]
 dev = [ "black", "isort", "pre-commit", "pylint", "pyright", "pytest",]
