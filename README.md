@@ -1,11 +1,17 @@
-# python_template
-General purpose template for installable python projects
+# EveryCure tech assessment
 
-## Todo
+## Overview
 
-- [ ] Add github actions (testing, deployment, publishing)
+1. Set up project and dev environment (github, docker etc.)
+2. Load data into a Neo4j graph
+3. Generate embeddings for downstream ML
+4. Build predictive model to predict disease-drug response
 
-## Installation
+## python_template
+
+General purpose template for installable python projects - [link](https://github.com/JBwdn/python_template)
+
+### Installation
 
 ```bash
 micromamba create -f environment.yml
@@ -18,17 +24,6 @@ pip install ".[test]"  # Install the package and all test dependencies
 demo-script  # Run the included scripts from the shell
 ```
 
-## Usage
-
-### Importing and using code
-
-```python
-# Import the package and run some included function:
-
-from package import scripts
-scripts.demo.main()
-```
-
 ### Running pre-commit hooks
 
 ```bash
@@ -37,12 +32,4 @@ pre-commit install
 
 # Run all the hooks:
 pre-commit run --all-files
-```
-
-### Running tests
-
-```bash
-# Pytest will find all files with the name "test_*.py" or "*_test.py" and run them:
-
-pytest
 ```
