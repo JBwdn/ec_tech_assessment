@@ -3,18 +3,20 @@ requires = [ "setuptools>=61",]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "template"
+name = "ec_tech_assessment"
 version = "0.1"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [ "neo4j", "scikit-learn", "xgboost",]
 dynamic = []
 
 [project.urls]
-Homepage = "https://github.com/JBwdn/python_template"
+Homepage = "https://github.com/JBwdn/ec_tech_assesment"
 
 [project.scripts]
-demo-script = "package.scripts.demo:main"
 launch_n4j = "package.scripts.launch_neo4j:main"
+load_data = "package.scripts.load_data:main"
+generate_embeddings = "package.scripts.generate_embeddings:main"
+train_xgb = "package.scripts.train_xgb:main"
 
 [project.optional-dependencies]
 dev = [ "black", "isort", "pre-commit", "pylint", "pyright", "pytest",]
