@@ -1,4 +1,4 @@
-name: template
+name: ec_tech
 channels:
 - conda-forge
 dependencies:
