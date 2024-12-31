@@ -1,0 +1,26 @@
+repos:
+-   repo: https://github.com/ambv/black
+    rev: 24.4.2
+    hooks:
+    - id: black
+
+-   repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+
+-   repo: https://github.com/pycqa/pylint
+    rev: v3.2.3
+    hooks:
+    -   id: pylint
+
+-   repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.368
+    hooks:
+    - id: pyright
+
+-   repo: https://github.com/repo-helper/pyproject-parser
+    rev: v0.11.1 
+    hooks:
+    - id: check-pyproject
+    - id: reformat-pyproject

@@ -1,0 +1,38 @@
+[build-system]
+requires = [ "setuptools>=61",]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "template"
+version = "0.1"
+requires-python = ">=3.10"
+dependencies = []
+dynamic = []
+
+[project.urls]
+Homepage = "https://github.com/JBwdn/python_template"
+
+[project.scripts]
+demo-script = "package.scripts.demo:main"
+
+[project.optional-dependencies]
+dev = [ "black", "isort", "pre-commit", "pylint", "pyright", "pytest",]
+test = [ "pytest",]
+
+[tool.pylint]
+max-line-length = 100
+disable = "import-error"
+
+[tool.pyright]
+reportMissingImports = false
+pythonVersion = "3.12"
+
+[tool.black]
+target-version = [ "py312",]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+filter_files = true
+
+[tool.setuptools.packages.find]
