@@ -24,7 +24,8 @@ RETURN node
 
 LOAD_EDGES_CQL = """
 LOAD CSV WITH HEADERS FROM 'file:///{path}' AS row
-MATCH (subject {{name: row.subject}}), (object {{name: row.object}})
+MATCH (subject {{id: row.subject}})
+MATCH (object {{id: row.object}}) 
 CALL apoc.create.relationship(
     subject,
     row.predicate,
@@ -49,6 +50,7 @@ class DataLoader:
     def clear(self) -> None:
         """Clear the database."""
         self.session.run("MATCH (n) DETACH DELETE n")  # type: ignore
+        print("Database cleared.")
 
     def status(self) -> None:
         """Count the number of nodes and relationships."""
@@ -59,10 +61,12 @@ class DataLoader:
 
     def load_nodes(self, path: str) -> None:
         """Load nodes from a CSV file."""
+        print("Loading nodes...")
         self.session.run(LOAD_NODES_CQL.format(path=path))  # type: ignore
 
     def load_edges(self, path: str) -> None:
         """Load edges from a CSV file."""
+        print("Loading edges...")
         self.session.run(LOAD_EDGES_CQL.format(path=path))  # type: ignore
 
 
