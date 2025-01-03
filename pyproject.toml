@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "ec_tech_assessment"
 version = "0.1"
 requires-python = ">=3.10"
-dependencies = [ "neo4j", "scikit-learn", "xgboost",]
+dependencies = [ "neo4j", "polars", "scikit-learn", "xgboost",]
 dynamic = []
 
 [project.urls]
