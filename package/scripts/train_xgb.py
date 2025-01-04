@@ -10,8 +10,8 @@ from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import KFold, train_test_split
 from xgboost import XGBClassifier
 
-GROUND_TRUTH_PATH = "~/scratch/everycure/data/Ground_Truth.csv"
-EMBEDDINGS_PATH = "~/scratch/everycure/data/Embeddings.csv"
+GROUND_TRUTH_PATH = "data/Ground Truth.csv"
+EMBEDDINGS_PATH = "generated_embeddings.csv"
 
 XGB_PARAMS = {}
 
@@ -22,13 +22,11 @@ def main() -> None:
     and evaluate an XGBoost classifier.
     """
     # Mung and join the data:
-    ground_truth_df = pl.read_csv(GROUND_TRUTH_PATH).sample(10000)
+    ground_truth_df = pl.read_csv(GROUND_TRUTH_PATH)  # .sample(10000)
     embeddings_df = pl.read_csv(EMBEDDINGS_PATH)
 
-    emb_mapper = lambda id: embeddings_df.filter(pl.col("id") == id)[
-        "topological_embedding"
-    ].first()
-    eval_mapper = lambda x: np.fromstring(x.strip("[]"), sep=" ")
+    emb_mapper = lambda id: embeddings_df.filter(pl.col("id") == id)["fastrp_vector"].first()
+    eval_mapper = lambda x: np.fromstring(x.strip("[]"), sep=", ")
 
     ground_truth_df = ground_truth_df.with_columns(
         [
