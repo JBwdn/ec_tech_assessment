@@ -7,6 +7,13 @@
 3. Generate embeddings for downstream ML
 4. Build predictive model to predict disease-drug response
 
+## Key files
+
+1. [launch_neo4j.py](/package/scripts/launch_neo4j.py) - Neo4j container configuration
+2. [load_data.py](/package/scripts/load_data.py) - Load the nodes and edges into Neo4j
+3. [generate_embeddings.py](/package/scripts/generate_embeddings.py) - Run FastRP, write embeddings to nodes and output to a csv
+4. [train_xgb.py](/package/scripts/train_xgb.py) - Train an XGBoost classifier on the embeddings and evaluate using ROC AUC score
+
 ## Notes
 
 1. I have used a previously made python template to structure the repo making it pip installable [link](https://github.com/JBwdn/python_template). This is pre-configured to use a few tools including: 
@@ -16,15 +23,19 @@
     - This needs to be run from within the `data/` directory containing the provided data files.
 3. The data loading script works well for the nodes but is very slow for the relationships (due to looking up the id for each `from_id` and `to_id` field). Previously I have used the Neo4j admin import command to load large lists of edges, but this requires some data preprocessing and is probably beyond the scope for now.
     - All provided fields are loaded into the graph, but I will probably only use the topology to generate embeddings as augmenting the graph with features from the cross-referenced databases will be take a while...
-4. I have chosen to use FastRP for generating node embeddings from the graph. At least for the number of edges I have loaded this seems to run fast enough that calculating these for ALL node types is not a big deal. Then I will pull the required embeddings from the `embeddings.csv` output file using the ids in `Ground Truth.csv`.
+4. I have chosen to use FastRP for generating node embeddings from the graph. At least for the number of edges I have loaded this seems to run fast enough that calculating these for ALL node types is not a big deal. Then I will pull the required embeddings from the `generated_embeddings.csv` output file using the ids in `Ground Truth.csv`.
     - FastRP is better for use with undirected relationships but it is what I am more familiar with from GDS so have used that here.
-    - I have selected an embedding size of 128 based on the size of the graph and projected memory usage on my machine.
 5. In my previous role XGBoost has performed well on tasks involving graph embeddings (though primarily this was regression problems). Here we will just use the default parameters, however a logical next stage would be to perform a hyperparameter sweep against the embeddings.
     - Using the ground truth dataset we can join embeddings for corresponding `Disease` and `treatment` nodes and use these to predict against the `y` column.
     - Here we run 5-fold cross validated evaluation of the model against an 80% training dataset, then validate the performance against a held-out 20% split. 
-    - In testing against 10 000 randomly sampled rows of the ground truth dataset and using the provided embeddings, the `XGBoostClassifer` reaches ROC AUC scores of 0.9196 (mean of 5xCV) and 0.9137 (20% reserved validation). 
+    - In testing against 10 000 randomly sampled rows of the ground truth dataset and using the provided embeddings, the `XGBoostClassifer` reaches ROC AUC scores of **0.9196 (mean of 5xCV) and 0.9137 (20% reserved validation).** 
         - This shows some overfitting (kind of expected with XGB) but will likely scale as we use more of the dataset. 
-6. I have left Neo4J loading the edges overnight and will check the performance of XGBoost against my embeddings tomorrow...
+6. I have left Neo4J loading the edges overnight and will check the performance of XGBoost against my embeddings tomorrow... This has worked but took around 12 hours - there are optimisations for the edge loading CQL query such as batching and multiprocessing (another sensible option would be to run Neo4j on something more powerful than my laptop)
+7. Using the FastRP embeddings, the classifier achieves ROC AUC scores of:
+    - (with 10000 samples) **0.8102 (mean of 5xCV) and 0.7984 (20% reserved validation)**
+    - (with the whole ground truth dataset) **0.8386 (mean of 5xCV) and 0.8504 (20% reserved validation)**
+8.  My embeddings therefore are useful in predicting against this dataset! They are of lower quality than those provided, however, it would be simple to evaluate the other algorithms available in GDS (eg. GraphSAGE and Node2Vec) and test how increasing the embedding dimension changes performance.
+
 ## Usage
 
 ```bash
