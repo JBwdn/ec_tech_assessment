@@ -14,6 +14,8 @@
 3. [generate_embeddings.py](/package/scripts/generate_embeddings.py) - Run FastRP, write embeddings to nodes and output to a csv
 4. [train_xgb.py](/package/scripts/train_xgb.py) - Train an XGBoost classifier on the embeddings and evaluate using ROC AUC score
 
+The FastRP embeddings can be downloaded from Drive [here](https://drive.google.com/file/d/16Randy7chdKWJVRHluKWLntbNuEIwXVj/view?usp=sharing)
+
 ## Notes
 
 1. I have used a previously made python template to structure the repo making it pip installable [link](https://github.com/JBwdn/python_template). This is pre-configured to use a few tools including: 
