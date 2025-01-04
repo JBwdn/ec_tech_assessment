@@ -7,7 +7,6 @@ import csv
 from neo4j import GraphDatabase
 
 NEO4J_URI = "neo4j://localhost:7687"
-EMBEDDINGS_FILE = "embeddings.csv"
 
 GRAPH_PROJECTION_CQL = """
 MATCH (p)-[r]->(s)
@@ -93,8 +92,8 @@ def main() -> None:
     driver.delete_projection()
     driver.project_graph()
     driver.estimate_memory()
-    driver.fastrp(dim=128)
-    driver.write_embeddings(EMBEDDINGS_FILE)
+    driver.fastrp(dim=256)
+    driver.write_embeddings("generated_embeddings.csv")
     driver.close()
 
 
